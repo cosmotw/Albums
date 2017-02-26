@@ -11,5 +11,6 @@ const { mix } = require('laravel-mix');
  |
  */
 
-mix.react('resources/assets/js/app.jsx', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
+mix.react('resources/assets/js/albums/component.jsx', 'public/js/albums')
+   .sass('resources/assets/sass/reset.scss', 'public/css')
+   .sass('resources/assets/sass/albums/index.scss', 'public/css/albums');
