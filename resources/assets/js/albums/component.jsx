@@ -16,18 +16,9 @@ class Album extends React.Component {
         };
     }
     componentWillMount() {
-        this.getData().then((data) => {
+        $.get('/api/v1/albums/getAlbumPhotos', function(data) {
             this.setState({images: data});
-        });
-    }
-    getData() {
-        const data = new Promise((resolve, reject) => {
-            $.get('/api/v1/albums/getAlbumPhotos', function(data) {
-                resolve(data);
-            });
-        });
-
-        return data;
+        }.bind(this));
     }
     showPanel() {
         this.setState({
