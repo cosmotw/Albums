@@ -19,8 +19,7 @@ class AlbumTableSeeder extends Seeder
             'https://c1.staticflickr.com/1/567/22255378448_52ed3b1976_o.jpg',
             'https://c1.staticflickr.com/5/4080/4949399460_fdbe32496a_o.jpg',
             'https://c1.staticflickr.com/9/8119/30039372472_08810a26ac_o.jpg',
-            'https://c1.staticflickr.com/6/5666/29927785443_8e0d366eef_o.jpg',
-            'https://c1.staticflickr.com/6/5441/22792831228_d8bd2614ed_o.jpg'
+            'https://c1.staticflickr.com/6/5666/29927785443_8e0d366eef_o.jpg'
         ];
 
         foreach($photosUrl as $url) {
@@ -31,8 +30,8 @@ class AlbumTableSeeder extends Seeder
                 'photo_url' => $url,
                 'description' => str_random(100),
                 'category' => rand(1, 10),
-                'created_at' => $date->addWeeks(rand(1, 52))->format('Y-m-d H:i:s'),
-                'updated_at' => $date->addWeeks(rand(1, 52))->format('Y-m-d H:i:s')
+                'created_at' => $date->addWeeks(rand(1, 52))->addHours(rand(1, 24))->addMinutes(rand(1, 59))->addSeconds(rand(1, 59))->format('Y-m-d H:i:s'),
+                'updated_at' => $date->addWeeks(rand(1, 52))->addHours(rand(1, 24))->addMinutes(rand(1, 59))->addSeconds(rand(1, 59))->format('Y-m-d H:i:s')
             ]);
         }
     }
