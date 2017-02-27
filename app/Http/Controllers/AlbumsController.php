@@ -52,7 +52,8 @@ class AlbumsController extends Controller
      */
     public function show(Albums $albums)
     {
-        //
+        $photos = $albums::all();
+        return $photos;
     }
 
     /**

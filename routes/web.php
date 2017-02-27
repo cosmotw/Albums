@@ -15,4 +15,4 @@ Route::get('/', function() {
     return view('welcome');
 });
 
-Route::resource('/albums/{locale?}/{category?}', 'AlbumsController');
+Route::get('/albums/{locale?}', 'AlbumsController@index');

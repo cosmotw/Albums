@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 
-class AlbumTableSeeder extends Seeder
+class AlbumsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -25,7 +25,7 @@ class AlbumTableSeeder extends Seeder
         foreach($photosUrl as $url) {
             $date = Carbon::create(2016, 1, 1, 0, 0, 0);
 
-            DB::table('album')->insert([
+            DB::table('albums')->insert([
                 'title' => str_random(10),
                 'photo_url' => $url,
                 'description' => str_random(100),
