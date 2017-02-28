@@ -7,6 +7,7 @@ class Album extends React.Component {
         this.showPanel = this.showPanel.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.getData = this.getData.bind(this);
+        this.addImage = this.addImage.bind(this);
         this.state = {
             images: [],
             panel: false,
@@ -22,7 +23,7 @@ class Album extends React.Component {
     }
     getData() {
         return new Promise((resolve, reject) => {
-            $.get('/api/v1/albums', function(data) {
+            $.get("/api/v1/albums", function(data) {
                 resolve(data);
             });
         });
@@ -38,11 +39,18 @@ class Album extends React.Component {
     handleChange(key, value) {
         this.setState({[key]: value});
     };
-    handleSubmit() {
-        //送出表單
+    handleSubmit(e) {
+        e.preventDefault();
+        const postData = new FormData(document.querySelector("form" [0]));
+        postData.append("title", this.state.title);
+        postData.append("photo_url", this.state.photo_url);
+        postData.append("description", this.state.description);
+
+        $.ajax({url: "/api/v1/albums", type: "POST", data: postData, processData: false, contentType: false})
+
     }
-    addImage() {
-        const ImageArr = this.state.images.slice(); //先複製一份資料
+    addImage(e) {
+        const imageArr = this.state.images.slice(); //先複製一份資料
         const addImage = [
             {
                 "title": this.state.title,
@@ -51,13 +59,14 @@ class Album extends React.Component {
             }
         ];
 
-        ImageArr.concat(addImage); //加入新的圖片
+        const newImages = imageArr.concat(addImage); //加入新的圖片
 
         this.setState({
-            images: ImageArr, //更新頁面資訊
+            images: newImages, //更新頁面資訊
+            panel: false
         });
 
-        this.handleSubmit();
+        this.handleSubmit(e);
     }
     render() {
         return (
@@ -67,10 +76,11 @@ class Album extends React.Component {
                 </div>
                 <div className={this.state.images.length !== 0
                     ? "bottom-controller"
-                    : ""}>
+                    : "hidden"}>
                     <span className={this.state.panel
                         ? "up-panel-button"
-                        : "panel-button"} onClick={this.showPanel}></span>
+                        : "panel-button"} onClick={this.showPanel}>{this.state.panel ? "收合" : "開啟"}
+                    </span>
                     <div className={this.state.panel
                         ? "panel"
                         : "hidden"}>
@@ -78,15 +88,18 @@ class Album extends React.Component {
                             <form>
                                 <div className="form-group">
                                     <label>圖片名稱&nbsp;:</label>
-                                    <input type="text" value={this.state.title} name="" onChange={(e) => this.handleChange("title", e.target.value)}/>
+                                    <input type="text" value={this.state.title} name="title" onChange={(e) => this.handleChange("title", e.target.value)}/>
                                 </div>
                                 <div className="form-group">
                                     <label>圖片網址&nbsp;:</label>
-                                    <input type="text" value={this.state.photo_url} name="" onChange={(e) => this.handleChange("photo_url", e.target.value)}/>
+                                    <input type="text" value={this.state.photo_url} name="photo_url" onChange={(e) => this.handleChange("photo_url", e.target.value)}/>
                                 </div>
                                 <div className="form-group">
                                     <label>圖片描述&nbsp;:</label>
-                                    <textarea value={this.state.description} name="" onChange={(e) => this.handleChange("description", e.target.value)}></textarea>
+                                    <textarea value={this.state.description} name="description" onChange={(e) => this.handleChange("description", e.target.value)}></textarea>
+                                </div>
+                                <div className="form-group">
+                                    <button onClick={(e) => this.addImage(e)}>送出</button>
                                 </div>
                             </form>
                         </div>

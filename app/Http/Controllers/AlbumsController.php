@@ -34,9 +34,15 @@ class AlbumsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Albums $albums)
     {
-        //
+        $albums->title = $request->input('title');
+        $albums->photo_url = $request->input('photo_url');
+        $albums->description = $request->input('description');
+        $albums->category = $request->input('category', 1);
+        $code = $albums->save() ? 200 : 500;
+
+        return response()->json(['code' =>  $code]);
     }
 
     /**

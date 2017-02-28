@@ -9460,6 +9460,7 @@ var Album = function (_React$Component) {
         _this.showPanel = _this.showPanel.bind(_this);
         _this.handleSubmit = _this.handleSubmit.bind(_this);
         _this.getData = _this.getData.bind(_this);
+        _this.addImage = _this.addImage.bind(_this);
         _this.state = {
             images: [],
             panel: false,
@@ -9483,7 +9484,7 @@ var Album = function (_React$Component) {
         key: 'getData',
         value: function getData() {
             return new Promise(function (resolve, reject) {
-                $.get('/api/v1/albums', function (data) {
+                $.get("/api/v1/albums", function (data) {
                     resolve(data);
                 });
             });
@@ -9507,25 +9508,33 @@ var Album = function (_React$Component) {
         }
     }, {
         key: 'handleSubmit',
-        value: function handleSubmit() {
-            //送出表單
+        value: function handleSubmit(e) {
+            e.preventDefault();
+            var postData = new FormData(document.querySelector("form"[0]));
+            postData.append("title", this.state.title);
+            postData.append("photo_url", this.state.photo_url);
+            postData.append("description", this.state.description);
+
+            $.ajax({ url: "/api/v1/albums", type: "POST", data: postData, processData: false, contentType: false });
         }
     }, {
         key: 'addImage',
-        value: function addImage() {
-            var ImageArr = this.state.images.slice(); //先複製一份資料
+        value: function addImage(e) {
+            var imageArr = this.state.images.slice(); //先複製一份資料
             var addImage = [{
                 "title": this.state.title,
                 "photo_url": this.state.photo_url,
                 "description": this.state.description
             }];
 
-            ImageArr.concat(addImage); //加入新的圖片
+            var newImages = imageArr.concat(addImage); //加入新的圖片
 
             this.setState({
-                images: ImageArr });
+                images: newImages, //更新頁面資訊
+                panel: false
+            });
 
-            this.handleSubmit();
+            this.handleSubmit(e);
         }
     }, {
         key: 'render',
@@ -9542,8 +9551,12 @@ var Album = function (_React$Component) {
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
-                    { className: this.state.images.length !== 0 ? "bottom-controller" : "" },
-                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('span', { className: this.state.panel ? "up-panel-button" : "panel-button", onClick: this.showPanel }),
+                    { className: this.state.images.length !== 0 ? "bottom-controller" : "hidden" },
+                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                        'span',
+                        { className: this.state.panel ? "up-panel-button" : "panel-button", onClick: this.showPanel },
+                        this.state.panel ? "收合" : "開啟"
+                    ),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
                         { className: this.state.panel ? "panel" : "hidden" },
@@ -9561,7 +9574,7 @@ var Album = function (_React$Component) {
                                         null,
                                         '\u5716\u7247\u540D\u7A31\xA0:'
                                     ),
-                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', value: this.state.title, name: '', onChange: function onChange(e) {
+                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', value: this.state.title, name: 'title', onChange: function onChange(e) {
                                             return _this3.handleChange("title", e.target.value);
                                         } })
                                 ),
@@ -9573,7 +9586,7 @@ var Album = function (_React$Component) {
                                         null,
                                         '\u5716\u7247\u7DB2\u5740\xA0:'
                                     ),
-                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', value: this.state.photo_url, name: '', onChange: function onChange(e) {
+                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', value: this.state.photo_url, name: 'photo_url', onChange: function onChange(e) {
                                             return _this3.handleChange("photo_url", e.target.value);
                                         } })
                                 ),
@@ -9585,9 +9598,20 @@ var Album = function (_React$Component) {
                                         null,
                                         '\u5716\u7247\u63CF\u8FF0\xA0:'
                                     ),
-                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('textarea', { value: this.state.description, name: '', onChange: function onChange(e) {
+                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('textarea', { value: this.state.description, name: 'description', onChange: function onChange(e) {
                                             return _this3.handleChange("description", e.target.value);
                                         } })
+                                ),
+                                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                    'div',
+                                    { className: 'form-group' },
+                                    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                                        'button',
+                                        { onClick: function onClick(e) {
+                                                return _this3.addImage(e);
+                                            } },
+                                        '\u9001\u51FA'
+                                    )
                                 )
                             )
                         ),
