@@ -7,12 +7,6 @@ use Illuminate\Http\Request;
 
 class AlbumsController extends Controller
 {
-
-    public function __construct(string $locale = 'tw')
-    {
-        app()->setLocale($locale);
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +14,8 @@ class AlbumsController extends Controller
      */
     public function index()
     {
-        return view('index');
+        $photos = Albums::all();
+        return $photos;
     }
 
     /**
@@ -52,8 +47,7 @@ class AlbumsController extends Controller
      */
     public function show(Albums $albums)
     {
-        $photos = $albums::all();
-        return $photos;
+        //
     }
 
     /**

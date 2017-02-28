@@ -16,9 +16,16 @@ class Album extends React.Component {
         };
     }
     componentWillMount() {
-        $.get('/api/v1/albums/getAlbumPhotos', function(data) {
+        this.getData().then((data) => {
             this.setState({images: data});
-        }.bind(this));
+        });
+    }
+    getData() {
+        return new Promise((resolve, reject) => {
+            $.get('/api/v1/albums', function(data) {
+                resolve(data);
+            });
+        });
     }
     showPanel() {
         this.setState({
@@ -26,7 +33,7 @@ class Album extends React.Component {
         });
     }
     deleteImage() {
-        alert("DELETE IMAGE");
+        //
     }
     handleChange(key, value) {
         this.setState({[key]: value});
@@ -58,7 +65,9 @@ class Album extends React.Component {
                 <div className="wrapper">
                     <ImageBox images={this.state.images}/>
                 </div>
-                <div className="bottom-controller">
+                <div className={this.state.images.length !== 0
+                    ? "bottom-controller"
+                    : ""}>
                     <span className={this.state.panel
                         ? "up-panel-button"
                         : "panel-button"} onClick={this.showPanel}></span>
@@ -90,9 +99,6 @@ class Album extends React.Component {
 }
 
 class ImageBox extends React.Component {
-    constructor() {
-        super();
-    }
     render() {
         const showImages = this.props.images.map((value, index) => {
             return (
@@ -105,7 +111,9 @@ class ImageBox extends React.Component {
         });
 
         return (
-            <div className="image-box">
+            <div className={this.props.images.length !== 0
+                ? "image-box"
+                : ""}>
                 {showImages}
             </div>
         );

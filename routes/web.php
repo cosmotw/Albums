@@ -15,4 +15,7 @@ Route::get('/', function() {
     return view('welcome');
 });
 
-Route::get('/albums/{locale?}', 'AlbumsController@index');
+Route::get('/albums/{locale?}', function(string $locale = 'tw') {
+    APP()->setLocale($locale);
+    return view('index');
+});

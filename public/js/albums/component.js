@@ -9473,9 +9473,20 @@ var Album = function (_React$Component) {
     _createClass(Album, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
-            $.get('/api/v1/albums/getAlbumPhotos', function (data) {
-                this.setState({ images: data });
-            }.bind(this));
+            var _this2 = this;
+
+            this.getData().then(function (data) {
+                _this2.setState({ images: data });
+            });
+        }
+    }, {
+        key: 'getData',
+        value: function getData() {
+            return new Promise(function (resolve, reject) {
+                $.get('/api/v1/albums', function (data) {
+                    resolve(data);
+                });
+            });
         }
     }, {
         key: 'showPanel',
@@ -9487,7 +9498,7 @@ var Album = function (_React$Component) {
     }, {
         key: 'deleteImage',
         value: function deleteImage() {
-            alert("DELETE IMAGE");
+            //
         }
     }, {
         key: 'handleChange',
@@ -9519,7 +9530,7 @@ var Album = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
 
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
@@ -9531,7 +9542,7 @@ var Album = function (_React$Component) {
                 ),
                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                     'div',
-                    { className: 'bottom-controller' },
+                    { className: this.state.images.length !== 0 ? "bottom-controller" : "" },
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('span', { className: this.state.panel ? "up-panel-button" : "panel-button", onClick: this.showPanel }),
                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                         'div',
@@ -9551,7 +9562,7 @@ var Album = function (_React$Component) {
                                         '\u5716\u7247\u540D\u7A31\xA0:'
                                     ),
                                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', value: this.state.title, name: '', onChange: function onChange(e) {
-                                            return _this2.handleChange("title", e.target.value);
+                                            return _this3.handleChange("title", e.target.value);
                                         } })
                                 ),
                                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -9563,7 +9574,7 @@ var Album = function (_React$Component) {
                                         '\u5716\u7247\u7DB2\u5740\xA0:'
                                     ),
                                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', value: this.state.photo_url, name: '', onChange: function onChange(e) {
-                                            return _this2.handleChange("photo_url", e.target.value);
+                                            return _this3.handleChange("photo_url", e.target.value);
                                         } })
                                 ),
                                 __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -9575,7 +9586,7 @@ var Album = function (_React$Component) {
                                         '\u5716\u7247\u63CF\u8FF0\xA0:'
                                     ),
                                     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('textarea', { value: this.state.description, name: '', onChange: function onChange(e) {
-                                            return _this2.handleChange("description", e.target.value);
+                                            return _this3.handleChange("description", e.target.value);
                                         } })
                                 )
                             )
@@ -9596,7 +9607,7 @@ var ImageBox = function (_React$Component2) {
     function ImageBox() {
         _classCallCheck(this, ImageBox);
 
-        return _possibleConstructorReturn(this, (ImageBox.__proto__ || Object.getPrototypeOf(ImageBox)).call(this));
+        return _possibleConstructorReturn(this, (ImageBox.__proto__ || Object.getPrototypeOf(ImageBox)).apply(this, arguments));
     }
 
     _createClass(ImageBox, [{
@@ -9622,7 +9633,7 @@ var ImageBox = function (_React$Component2) {
 
             return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
                 'div',
-                { className: 'image-box' },
+                { className: this.props.images.length !== 0 ? "image-box" : "" },
                 showImages
             );
         }
